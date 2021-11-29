@@ -4,31 +4,33 @@ using UnityEngine;
 
 public class Controls_2 : MonoBehaviour
 {
-    public float speed;
-    public float jumpForce;
+    public float speed; //d
+    public float jumpForce; //d
     private float moveInput;
-    private Rigidbody2D rb;
-    private bool facingRight = true;
+    public Rigidbody2D rb;
+    public bool facingRight = true;
     private bool isGrounded;
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
-    private int extraJumps;
-    public int extraJumpsValue;
+    public int extraJumps;
+    public int extraJumpsValue; //d
     public float hangTime;
     private float hangCounter;
     public float jumpBufferLength;
     private float jumpBufferCounter;
-    public PlayerState State;
+    public PlayerState State; //d
     public float diveSpeed; //j
     public float skateSpeed; //j
     public float skateJump; //j
     public Animator anim;
     public Transform spawnPoint;
     public Transform Player;
+    public string character;
+    public JackKnife jack;
 
     
-    private void Start()
+    public void Start()
     {
         extraJumps = extraJumpsValue;
         rb = GetComponent <Rigidbody2D>();
@@ -39,57 +41,25 @@ public class Controls_2 : MonoBehaviour
     {
         //idle is the default state
         PlayerState tempState = PlayerState.Idle;
-        //locked states
-        if(State == PlayerState.Diving) //j
+        #region Jack Knife locked states
+        if (character == "Jack_Knife")
         {
-            Vector3 vel = rb.velocity;
-            if (facingRight)
+            if (State == PlayerState.Diving) //j
             {
-                vel.x = speed;
-                vel.y = -diveSpeed;
+                jack.JackDiving();
+                return;
             }
-            else
+            if (State == PlayerState.Skating) //j
             {
-                vel.x = -speed;
-                vel.y = -diveSpeed;
+                jack.JackSkating();
+                return;
             }
-            rb.velocity = vel;
-            return;
+            if (State == PlayerState.SkateJump) //j
+            {
+                jack.JackSkateJump();
+            }
         }
-        if(State == PlayerState.Skating) //j
-        {
-            Vector3 vel = rb.velocity;
-            if (facingRight)
-            {
-                vel.x = skateSpeed;
-            }
-            else
-            {
-                vel.x = -skateSpeed;
-            }
-            rb.velocity = vel;
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SetState(PlayerState.SkateJump);
-            }
-            return;
-        }
-        if(State == PlayerState.SkateJump) //j
-        {
-            Vector2 vel = rb.velocity;
-            if (facingRight)
-            {
-                vel.x = skateSpeed;
-                vel.y = skateJump;
-            }
-            else
-            {
-                vel.x = -skateSpeed;
-                vel.y = skateJump; //wertyuio
-            }
-            rb.velocity = vel;
-            extraJumps--;
-        }
+        #endregion
         //check if you're grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         //move input & flipping sprites

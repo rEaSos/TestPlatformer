@@ -4,32 +4,64 @@ using UnityEngine;
 
 public class JackKnife : MonoBehaviour
 {
-    private Controls cont;
+    public Controls_2 c;
 
-    private Rigidbody2D rb;
-    //public float surfForceX;
-    //public float surfForceY;
-    public Vector3 forceForward;
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        cont = GetComponent<Controls>();
-        rb = GetComponent<Rigidbody2D>();
+        c.character = "Jack_Knife";
+        c.speed = 8f;
+        c.jumpForce = 12f;
+        c.extraJumpsValue = 1;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    public void JackDiving()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        Vector3 vel = c.rb.velocity;
+        if (c.facingRight)
         {
-            //rb.velocity = new Vector2(surfForceX, surfForceY);
-            rb.AddForce(forceForward, ForceMode2D.Impulse);
-
-            if (cont.facingRight == false) // flip sprites when facing left
-            {
-                //surfForceX = -surfForceX;
-                rb.AddForce(-forceForward, ForceMode2D.Impulse);
-            }
+            vel.x = c.speed;
+            vel.y = -c.diveSpeed;
         }
+        else
+        {
+            vel.x = -c.speed;
+            vel.y = -c.diveSpeed;
+        }
+        c.rb.velocity = vel;
+    }
+
+    public void JackSkating()
+    {
+        Vector3 vel = c.rb.velocity;
+        if (c.facingRight)
+        {
+            vel.x = c.skateSpeed;
+        }
+        else
+        {
+            vel.x = -c.skateSpeed;
+        }
+        c.rb.velocity = vel;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            c.SetState(Controls_2.PlayerState.SkateJump);
+        }
+    }
+
+    public void JackSkateJump()
+    {
+        Vector2 vel = c.rb.velocity;
+        if (c.facingRight)
+        {
+            vel.x = c.skateSpeed;
+            vel.y = c.skateJump;
+        }
+        else
+        {
+            vel.x = -c.skateSpeed;
+            vel.y = c.skateJump;
+        }
+        c.rb.velocity = vel;
+        c.extraJumps--;
     }
 }

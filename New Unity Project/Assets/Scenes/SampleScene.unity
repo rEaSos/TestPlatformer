@@ -3250,13 +3250,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9d3149db305504db91712dde0698ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  jumpForce: 12
+  speed: 1
+  jumpForce: 1
+  rb: {fileID: 1421752165}
+  facingRight: 1
   groundCheck: {fileID: 4189092300550825384}
   checkRadius: 0.5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  extraJumps: 0
   extraJumpsValue: 1
   hangTime: 0.2
   jumpBufferLength: 0.15
@@ -3267,9 +3270,30 @@ MonoBehaviour:
   anim: {fileID: 1471970169}
   spawnPoint: {fileID: 2086299615}
   Player: {fileID: 1421752164}
+  character: 
+  jack: {fileID: 1421752162}
+--- !u!114 &1421752162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421752160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2277b5c136db94cb2a449f8059e699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  c: {fileID: 1421752161}
 --- !u!4 &1421752164 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7501944232409769101, guid: 8aafd24dd1bae7f4c820f0177f6aa980,
+    type: 3}
+  m_PrefabInstance: {fileID: 7501944231664882665}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &1421752165 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 7501944232409769099, guid: 8aafd24dd1bae7f4c820f0177f6aa980,
     type: 3}
   m_PrefabInstance: {fileID: 7501944231664882665}
   m_PrefabAsset: {fileID: 0}

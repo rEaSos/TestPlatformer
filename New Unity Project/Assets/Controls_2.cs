@@ -85,7 +85,7 @@ public class Controls_2 : MonoBehaviour
             else
             {
                 vel.x = -skateSpeed;
-                vel.y = skateJump;
+                vel.y = skateJump; //wertyuio
             }
             rb.velocity = vel;
             extraJumps--;

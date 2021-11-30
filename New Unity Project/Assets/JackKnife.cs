@@ -8,10 +8,12 @@ public class JackKnife : MonoBehaviour
 
     public void Start()
     {
-        c.character = "Jack_Knife";
-        c.speed = 8f;
-        c.jumpForce = 12f;
-        c.extraJumpsValue = 1;
+        if (c.character == "Jack_Knife")
+        {
+            c.speed = 8f;
+            c.jumpForce = 12f;
+            c.extraJumpsValue = 1;
+        }
     }
 
     public void JackDiving()

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Controls_2 : MonoBehaviour
 {
-    public float speed; //d
-    public float jumpForce; //d
+    public float speed;
+    public float jumpForce;
     private float moveInput;
     public Rigidbody2D rb;
     public bool facingRight = true;
@@ -14,27 +14,27 @@ public class Controls_2 : MonoBehaviour
     public float checkRadius;
     public LayerMask whatIsGround;
     public int extraJumps;
-    public int extraJumpsValue; //d
+    public int extraJumpsValue;
     public float hangTime;
     private float hangCounter;
     public float jumpBufferLength;
     private float jumpBufferCounter;
-    public PlayerState State; //d
-    public float diveSpeed; //j
-    public float skateSpeed; //j
-    public float skateJump; //j
+    public PlayerState State;
+    public float diveSpeed;
+    public float skateSpeed;
+    public float skateJump;
     public Animator anim;
     public Transform spawnPoint;
     public Transform Player;
     public string character;
     public JackKnife jack;
-
     
     public void Start()
     {
         extraJumps = extraJumpsValue;
         rb = GetComponent <Rigidbody2D>();
         //anim = GetComponent<Animator>();
+        character = "Jack_Knife";
     }
 
     private void Update()
@@ -60,6 +60,7 @@ public class Controls_2 : MonoBehaviour
             }
         }
         #endregion
+
         //check if you're grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         //move input & flipping sprites
@@ -69,6 +70,7 @@ public class Controls_2 : MonoBehaviour
         {
             tempState = PlayerState.Moving;
         }
+        #region Flip
         if (facingRight == false && moveInput > 0)
         {
             Flip();
@@ -77,6 +79,8 @@ public class Controls_2 : MonoBehaviour
         {
             Flip();
         }
+        #endregion
+        #region Hang Time/Jump Buffer
         //before you jump, check for coyote time & jump buffer
         if (isGrounded)
         {
@@ -95,6 +99,7 @@ public class Controls_2 : MonoBehaviour
         {
             jumpBufferCounter -= Time.deltaTime;
         }
+        #endregion
         //full hop & short hop input, and replenish jumps when grounded
         //jumps managed by coyote time & jump buffer counters
         //hangCounter acts like isGrounded == true, jumpBufferCounter acts like Input.GetKeyDown(KeyCode.Space)
@@ -119,39 +124,44 @@ public class Controls_2 : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
         //dive input
-        if (Input.GetKey(KeyCode.DownArrow) && !isGrounded) //j
+        if (character == "Jack_Knife")
         {
-            Vector3 vel = rb.velocity;
-            if (facingRight)
+            #region Jack Knife inputs
+            if (Input.GetKey(KeyCode.DownArrow) && !isGrounded)
             {
-                vel.x = speed;
-                vel.y = -diveSpeed;
+                Vector3 vel = rb.velocity;
+                if (facingRight)
+                {
+                    vel.x = speed;
+                    vel.y = -diveSpeed;
+                }
+                else
+                {
+                    vel.x = -speed;
+                    vel.y = -diveSpeed;
+                }
+                rb.velocity = vel;
+                tempState = PlayerState.Diving;
             }
-            else
+            //skate jump input
+            if (Input.GetKeyDown(KeyCode.Space) && State == PlayerState.Skating)
             {
-                vel.x = -speed;
-                vel.y = -diveSpeed;
+                Vector3 vel = rb.velocity;
+                if (facingRight)
+                {
+                    vel.x = skateSpeed;
+                    vel.y = skateJump;
+                }
+                else
+                {
+                    vel.x = -skateSpeed;
+                    vel.y = skateJump;
+                }
+                rb.velocity = vel;
+                extraJumps--;
+                tempState = PlayerState.SkateJump;
             }
-            rb.velocity = vel;
-            tempState = PlayerState.Diving;
-        }
-        //skate jump input
-        if(Input.GetKeyDown(KeyCode.Space) && State == PlayerState.Skating) //j
-        {
-            Vector3 vel = rb.velocity;
-            if(facingRight)
-            {
-                vel.x = skateSpeed;
-                vel.y = skateJump;
-            }
-            else
-            {
-                vel.x = -skateSpeed;
-                vel.y = skateJump;
-            }
-            rb.velocity = vel;
-            extraJumps--;
-            tempState = PlayerState.SkateJump;
+            #endregion
         }
         SetState(tempState);
     }

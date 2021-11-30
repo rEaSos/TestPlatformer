@@ -5,7 +5,9 @@ using UnityEngine;
 public class JackKnife : MonoBehaviour
 {
     public Controls_2 c;
-
+    public float diveSpeed = 15f;
+    public float skateSpeed = 15f;
+    public float skateJump = 17f;
     public void Start()
     {
         if (c.character == "Jack_Knife")
@@ -22,12 +24,12 @@ public class JackKnife : MonoBehaviour
         if (c.facingRight)
         {
             vel.x = c.speed;
-            vel.y = -c.diveSpeed;
+            vel.y = -diveSpeed;
         }
         else
         {
             vel.x = -c.speed;
-            vel.y = -c.diveSpeed;
+            vel.y = -diveSpeed;
         }
         c.rb.velocity = vel;
     }
@@ -37,11 +39,11 @@ public class JackKnife : MonoBehaviour
         Vector3 vel = c.rb.velocity;
         if (c.facingRight)
         {
-            vel.x = c.skateSpeed;
+            vel.x = skateSpeed;
         }
         else
         {
-            vel.x = -c.skateSpeed;
+            vel.x = -skateSpeed;
         }
         c.rb.velocity = vel;
         if (Input.GetKeyDown(KeyCode.Space))
@@ -55,13 +57,13 @@ public class JackKnife : MonoBehaviour
         Vector2 vel = c.rb.velocity;
         if (c.facingRight)
         {
-            vel.x = c.skateSpeed;
-            vel.y = c.skateJump;
+            vel.x = skateSpeed;
+            vel.y = skateJump;
         }
         else
         {
-            vel.x = -c.skateSpeed;
-            vel.y = c.skateJump;
+            vel.x = -skateSpeed;
+            vel.y = skateJump;
         }
         c.rb.velocity = vel;
         c.extraJumps--;

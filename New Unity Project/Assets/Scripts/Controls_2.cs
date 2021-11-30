@@ -20,9 +20,6 @@ public class Controls_2 : MonoBehaviour
     public float jumpBufferLength;
     private float jumpBufferCounter;
     public PlayerState State;
-    public float diveSpeed;
-    public float skateSpeed;
-    public float skateJump;
     public Animator anim;
     public Transform spawnPoint;
     public Transform Player;
@@ -41,7 +38,7 @@ public class Controls_2 : MonoBehaviour
     {
         //idle is the default state
         PlayerState tempState = PlayerState.Idle;
-        #region Jack Knife locked states
+        #region Jack Knife states
         if (character == "Jack_Knife")
         {
             if (State == PlayerState.Diving) //j
@@ -60,7 +57,7 @@ public class Controls_2 : MonoBehaviour
             }
         }
         #endregion
-
+        #region Move & Jump
         //check if you're grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         //move input & flipping sprites
@@ -123,7 +120,8 @@ public class Controls_2 : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
-        //dive input
+        #endregion
+        //special inputs
         if (character == "Jack_Knife")
         {
             #region Jack Knife inputs
@@ -133,12 +131,12 @@ public class Controls_2 : MonoBehaviour
                 if (facingRight)
                 {
                     vel.x = speed;
-                    vel.y = -diveSpeed;
+                    vel.y = -jack.diveSpeed;
                 }
                 else
                 {
                     vel.x = -speed;
-                    vel.y = -diveSpeed;
+                    vel.y = -jack.diveSpeed;
                 }
                 rb.velocity = vel;
                 tempState = PlayerState.Diving;
@@ -149,13 +147,13 @@ public class Controls_2 : MonoBehaviour
                 Vector3 vel = rb.velocity;
                 if (facingRight)
                 {
-                    vel.x = skateSpeed;
-                    vel.y = skateJump;
+                    vel.x = jack.skateSpeed;
+                    vel.y = jack.skateJump;
                 }
                 else
                 {
-                    vel.x = -skateSpeed;
-                    vel.y = skateJump;
+                    vel.x = -jack.skateSpeed;
+                    vel.y = jack.skateJump;
                 }
                 rb.velocity = vel;
                 extraJumps--;
@@ -174,29 +172,45 @@ public class Controls_2 : MonoBehaviour
         }
         if(state == PlayerState.Idle)
         {
-            //Animation or sprite updates should go in here
-            anim.Play("Jack_Idle");
+            if (character == "Jack_Knife")
+            {
+                anim.Play("Jack_Idle");
+            }
         }
         else if(state == PlayerState.Moving)
         {
-            anim.Play("Jack_Moving");
+            if (character == "Jack_Knife")
+            {
+                anim.Play("Jack_Moving");
+            }
         }
         else if(state == PlayerState.Jumping)
         {
-            anim.Play("Jack_Jumping");
+            if (character == "Jack_Knife")
+            {
+                anim.Play("Jack_Jumping");
+            }
         }
-        else if(state == PlayerState.Diving) //j
+        #region Jack Knife anims
+        else if (state == PlayerState.Diving) //j
         {
-            anim.Play("Jack_Diving");
+            if (character == "Jack_Knife")
+            {
+                anim.Play("Jack_Diving");
+            }    
         }
         else if(state == PlayerState.Skating) //j
         {
-            anim.Play("Jack_Skating");
+            if (character == "Jack_Knife")
+            {
+                anim.Play("Jack_Skating");
+            }
         }
         else if(state == PlayerState.SkateJump) //j
         {
             
         }
+        #endregion
         State = state;
     }
 
@@ -208,6 +222,7 @@ public class Controls_2 : MonoBehaviour
         transform.localScale = Scaler;
     }
 
+    #region Jack Knife collisions
     //dive into skate & skate jump into idle collision
     private void OnCollisionEnter2D(Collision2D collision) //j
     {
@@ -223,7 +238,9 @@ public class Controls_2 : MonoBehaviour
            }
         }
     }
+    #endregion
 
+    #region dev respawn
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 9)
@@ -231,16 +248,20 @@ public class Controls_2 : MonoBehaviour
             Player.transform.position = spawnPoint.transform.position;
         }
     }
+    #endregion
 
     public enum PlayerState
     {
+        //remember to put a , after the previously last state when adding new ones!
         None = 0,
         Idle = 1,
         Moving = 2,
         Jumping = 3,
-        Diving = 4, //j
-        Skating = 5, //j
-        SkateJump = 6 //j
+        #region Jack Knife enums
+        Diving = 4,
+        Skating = 5,
+        SkateJump = 6
+        #endregion
     }
 
 }

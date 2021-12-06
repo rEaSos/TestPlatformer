@@ -25,17 +25,20 @@ public class Controls_2 : MonoBehaviour
     public Transform Player;
     public string character;
     public JackKnife jack;
+    public Stout stout;
     
     public void Start()
     {
         extraJumps = extraJumpsValue;
         rb = GetComponent <Rigidbody2D>();
         //anim = GetComponent<Animator>();
-        character = "Jack_Knife";
+        //character = "Jack_Knife";
+        character = "Stout";
     }
 
     private void Update()
     {
+        Debug.Log(character);
         //idle is the default state
         PlayerState tempState = PlayerState.Idle;
         #region Jack Knife states
@@ -56,6 +59,8 @@ public class Controls_2 : MonoBehaviour
                 jack.JackSkateJump();
             }
         }
+        #endregion
+        #region Stout states
         #endregion
         #region Move & Jump
         //check if you're grounded
@@ -260,7 +265,10 @@ public class Controls_2 : MonoBehaviour
         #region Jack Knife enums
         Diving = 4,
         Skating = 5,
-        SkateJump = 6
+        SkateJump = 6,
+        #endregion
+        #region Stout enums
+        Hover = 7
         #endregion
     }
 

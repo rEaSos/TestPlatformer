@@ -26,14 +26,15 @@ public class Controls_2 : MonoBehaviour
     public string character;
     public JackKnife jack;
     public Stout stout;
+    public Pause pause;
     
     public void Start()
     {
         extraJumps = extraJumpsValue;
         rb = GetComponent <Rigidbody2D>();
         //anim = GetComponent<Animator>();
-        //character = "Jack_Knife";
-        character = "Stout";
+        character = "Jack_Knife";
+        pause.PauseGame();
     }
 
     private void Update()
@@ -130,7 +131,7 @@ public class Controls_2 : MonoBehaviour
         if (character == "Jack_Knife")
         {
             #region Jack Knife inputs
-            if (Input.GetKey(KeyCode.DownArrow) && !isGrounded)
+            if (Input.GetKey(KeyCode.DownArrow) && !isGrounded || Input.GetKey(KeyCode.S) && !isGrounded)
             {
                 Vector3 vel = rb.velocity;
                 if (facingRight)

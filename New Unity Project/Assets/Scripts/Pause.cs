@@ -45,6 +45,7 @@ public class Pause : MonoBehaviour
         c.character = "Jack_Knife";
         jack.ImJack();
         jackArt.SetActive(true);
+        c.facingRight = true;
         c.SetState(Controls_2.PlayerState.Jumping);
         ResumeGame();
     }
@@ -54,6 +55,7 @@ public class Pause : MonoBehaviour
         c.character = "Stout";
         stout.ImStout();
         jackArt.SetActive(false);
+        c.facingRight = true;
         c.SetState(Controls_2.PlayerState.Jumping);
         ResumeGame();
     }

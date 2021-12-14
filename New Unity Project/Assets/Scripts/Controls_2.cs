@@ -62,6 +62,13 @@ public class Controls_2 : MonoBehaviour
         }
         #endregion
         #region Stout states
+        if (character == "Stout")
+        {
+            if (State == PlayerState.Hover)
+            {
+                stout.StoutHover();
+            }
+        }
         #endregion
         #region Move & Jump
         //check if you're grounded
@@ -109,6 +116,7 @@ public class Controls_2 : MonoBehaviour
         if (hangCounter > 0f) 
         {
             extraJumps = extraJumpsValue;
+            stout.StoutHoverRefresh();
         }
         if (jumpBufferCounter > 0f && extraJumps > 0)
         {
@@ -164,6 +172,30 @@ public class Controls_2 : MonoBehaviour
                 rb.velocity = vel;
                 extraJumps--;
                 tempState = PlayerState.SkateJump;
+            }
+            #endregion
+        }
+        if (character == "Stout")
+        {
+            #region Stout inputs
+            if (Input.GetKey(KeyCode.UpArrow) && !isGrounded)
+            {
+                stout.hoverCounter -= Time.deltaTime;
+                Vector3 vel = rb.velocity;
+                if (stout.hoverCounter > 0)
+                {
+                    vel.y = 0;
+                    rb.gravityScale = 0;
+                }
+                else
+                {
+                    rb.gravityScale = 2.75f;
+                }
+                rb.velocity = vel;
+            }
+            else
+            {
+                rb.gravityScale = 2.75f;
             }
             #endregion
         }

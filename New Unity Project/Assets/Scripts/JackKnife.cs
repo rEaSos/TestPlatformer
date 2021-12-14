@@ -64,7 +64,7 @@ public class JackKnife : MonoBehaviour
 
     public void JackSkateJump()
     {
-        Vector2 vel = c.rb.velocity;
+        Vector3 vel = c.rb.velocity;
         if (c.facingRight)
         {
             vel.x = skateSpeed;

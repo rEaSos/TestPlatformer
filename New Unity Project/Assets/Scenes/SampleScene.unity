@@ -3723,6 +3723,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   c: {fileID: 1421752161}
   Player: {fileID: 1421752160}
+  hoverTime: 1.5
+  hoverCounter: 0
 --- !u!1 &1442155762
 GameObject:
   m_ObjectHideFlags: 0

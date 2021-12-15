@@ -22,7 +22,6 @@ public class JackKnife : MonoBehaviour
     public void ImJack()
     {
         Player.transform.localScale = new Vector2(1, 1);
-        //stout.SetActive(false);
         c.speed = 8f;
         c.jumpForce = 12f;
         c.extraJumpsValue = 1;

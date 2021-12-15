@@ -8,6 +8,7 @@ public class Stout : MonoBehaviour
     public GameObject Player;
     public float hoverTime = 2f;
     public float hoverCounter;
+    public GameObject stoutArt;
     
     public void Start()
     {
@@ -19,8 +20,11 @@ public class Stout : MonoBehaviour
     }
     public void ImStout()
     {
+        #region art bugs
+        // stop art from stretching
+        stoutArt.transform.localScale = new Vector2(0.1009718f, 0.08220464286f);
+        #endregion
         Player.transform.localScale = new Vector2(2.5f, 1.4f);
-        //stout.SetActive(true);
         c.speed = 6f;
         c.jumpForce = 14f;
         c.extraJumpsValue = 1;

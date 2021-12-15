@@ -8,6 +8,7 @@ public class Pause : MonoBehaviour
     public GameObject pauseMenuUI;
     public Controls_2 c;
     public GameObject jackArt;
+    public GameObject stoutArt;
     public JackKnife jack;
     public Stout stout;
 
@@ -45,6 +46,7 @@ public class Pause : MonoBehaviour
         c.character = "Jack_Knife";
         jack.ImJack();
         jackArt.SetActive(true);
+        stoutArt.SetActive(false);
         c.facingRight = true;
         c.SetState(Controls_2.PlayerState.Jumping);
         ResumeGame();
@@ -55,6 +57,7 @@ public class Pause : MonoBehaviour
         c.character = "Stout";
         stout.ImStout();
         jackArt.SetActive(false);
+        stoutArt.SetActive(true);
         c.facingRight = true;
         c.SetState(Controls_2.PlayerState.Jumping);
         ResumeGame();

@@ -9,7 +9,7 @@ public class Controls_2 : MonoBehaviour
     private float moveInput;
     public Rigidbody2D rb;
     public bool facingRight = true;
-    private bool isGrounded;
+    public bool isGrounded;
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
@@ -20,21 +20,31 @@ public class Controls_2 : MonoBehaviour
     public float jumpBufferLength;
     private float jumpBufferCounter;
     public PlayerState State;
-    public Animator anim;
+    public Animator jackAnim;
+    public Animator stoutAnim;
     public Transform spawnPoint;
     public Transform Player;
     public string character;
     public JackKnife jack;
     public Stout stout;
     public Pause pause;
+    private float timeBtwAttack;
+    public float startTimeBtwAttack;
+    public Transform attackPos;
+    public LayerMask whatisEnemy;
+    public float attackRange;
+    public int damage;
+    public GameObject stoutArt;
     
     public void Start()
     {
         extraJumps = extraJumpsValue;
         rb = GetComponent <Rigidbody2D>();
-        //anim = GetComponent<Animator>();
+        //jackAnim = GetComponent<Animator>();
+        //stoutAnim = GetComponent<Animator>();
         character = "Jack_Knife";
         pause.PauseGame();
+        groundCheck.position = new Vector2(-2.72f, -0.3f);
     }
 
     private void Update()
@@ -135,6 +145,24 @@ public class Controls_2 : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
         #endregion
+        #region Attack
+        if (timeBtwAttack <= 0)
+        {
+            if (Input.GetKey(KeyCode.RightShift))
+            {
+                Collider2D[] enemiestoDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatisEnemy);
+                for (int i = 0; i < enemiestoDamage.Length; i++)
+                {
+                    enemiestoDamage[i].GetComponent<Enemy>().TakeDamage(damage);
+                }
+            }
+            timeBtwAttack = startTimeBtwAttack;
+        }
+        else
+        {
+            timeBtwAttack -= startTimeBtwAttack;
+        }
+        #endregion
         //special inputs
         if (character == "Jack_Knife")
         {
@@ -186,6 +214,7 @@ public class Controls_2 : MonoBehaviour
                 {
                     vel.y = 0;
                     rb.gravityScale = 0;
+                    tempState = PlayerState.Hover;
                 }
                 else
                 {
@@ -212,21 +241,38 @@ public class Controls_2 : MonoBehaviour
         {
             if (character == "Jack_Knife")
             {
-                anim.Play("Jack_Idle");
+                jackAnim.Play("Jack_Idle");
+            }
+
+            if (character == "Stout")
+            {
+                //stoutArt.transform.localScale = new Vector2(0.1009718f, 0.08220464286f);
+                stoutAnim.Play("Stout_Idling");
             }
         }
         else if(state == PlayerState.Moving)
         {
             if (character == "Jack_Knife")
             {
-                anim.Play("Jack_Moving");
+                jackAnim.Play("Jack_Moving");
+            }
+
+            if (character == "Stout")
+            {
+                //stoutArt.transform.localScale = new Vector2(0.1009718f, 0.08220464286f);
+                stoutAnim.Play("Stout_Moving");
             }
         }
         else if(state == PlayerState.Jumping)
         {
             if (character == "Jack_Knife")
             {
-                anim.Play("Jack_Jumping");
+                jackAnim.Play("Jack_Jumping");
+            }
+
+            if (character == "Stout")
+            {
+                stoutAnim.Play("Stout_Jumping");
             }
         }
         #region Jack Knife anims
@@ -234,19 +280,29 @@ public class Controls_2 : MonoBehaviour
         {
             if (character == "Jack_Knife")
             {
-                anim.Play("Jack_Diving");
+                jackAnim.Play("Jack_Diving");
             }    
         }
         else if(state == PlayerState.Skating) //j
         {
             if (character == "Jack_Knife")
             {
-                anim.Play("Jack_Skating");
+                jackAnim.Play("Jack_Skating");
             }
         }
         else if(state == PlayerState.SkateJump) //j
         {
             
+        }
+        #endregion
+
+        #region Stout anims
+        else if (state == PlayerState.Hover)
+        {
+            if (character == "Stout")
+            {
+                stoutAnim.Play("Stout_Hover");
+            }
         }
         #endregion
         State = state;
@@ -285,6 +341,14 @@ public class Controls_2 : MonoBehaviour
         {
             Player.transform.position = spawnPoint.transform.position;
         }
+    }
+    #endregion
+
+    #region see attack hitbox
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
     #endregion
 

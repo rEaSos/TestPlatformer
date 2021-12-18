@@ -8,11 +8,12 @@ public class JackKnife : MonoBehaviour
     public float diveSpeed = 15f;
     public float skateSpeed = 15f;
     public float skateJump = 17f;
-    public GameObject Player;
+    public BoxCollider2D bc;
     //public GameObject stout;
 
     public void Start()
     {
+        bc = GetComponent<BoxCollider2D>();
         if (c.character == "Jack_Knife")
         {
             ImJack();
@@ -21,7 +22,7 @@ public class JackKnife : MonoBehaviour
 
     public void ImJack()
     {
-        Player.transform.localScale = new Vector2(1, 1);
+        bc.size = new Vector2(1, 1);
         c.speed = 8f;
         c.jumpForce = 12f;
         c.extraJumpsValue = 1;

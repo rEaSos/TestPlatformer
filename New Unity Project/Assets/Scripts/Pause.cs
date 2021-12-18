@@ -14,7 +14,7 @@ public class Pause : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             if (isPaused)
             {
@@ -24,6 +24,16 @@ public class Pause : MonoBehaviour
             {
                 PauseGame();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.C) && isPaused == true)
+        {
+            JackSwap();
+        }
+
+        if(Input.GetKeyDown(KeyCode.B) && isPaused == true)
+        {
+            StoutSwap();
         }
     }
 
@@ -44,22 +54,22 @@ public class Pause : MonoBehaviour
     public void JackSwap()
     {
         c.character = "Jack_Knife";
+        //AnimSet();
         jack.ImJack();
         jackArt.SetActive(true);
         stoutArt.SetActive(false);
-        c.facingRight = true;
-        c.SetState(Controls_2.PlayerState.Jumping);
+        //c.facingRight = true;
         ResumeGame();
     }
 
     public void StoutSwap()
     {
         c.character = "Stout";
+        //AnimSet();
         stout.ImStout();
         jackArt.SetActive(false);
         stoutArt.SetActive(true);
-        c.facingRight = true;
-        c.SetState(Controls_2.PlayerState.Jumping);
+        //c.facingRight = true;
         ResumeGame();
     }
 
@@ -67,5 +77,17 @@ public class Pause : MonoBehaviour
     {
         c.Player.transform.position = c.spawnPoint.transform.position;
         ResumeGame();
+    }
+
+    public void AnimSet()
+    {
+        if (c.isGrounded == false)
+        {
+            c.SetState(Controls_2.PlayerState.Jumping);
+        }
+        if (c.isGrounded == true)
+        {
+            c.SetState(Controls_2.PlayerState.Idle);
+        }
     }
 }

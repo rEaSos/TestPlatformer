@@ -28,13 +28,8 @@ public class Controls_2 : MonoBehaviour
     public JackKnife jack;
     public Stout stout;
     public Pause pause;
-    private float timeBtwAttack;
-    public float startTimeBtwAttack;
-    public Transform attackPos;
-    public LayerMask whatisEnemy;
-    public float attackRange;
-    public int damage;
     public GameObject stoutArt;
+    public Checkpoints check;
     
     public void Start()
     {
@@ -44,7 +39,8 @@ public class Controls_2 : MonoBehaviour
         //stoutAnim = GetComponent<Animator>();
         character = "Jack_Knife";
         pause.PauseGame();
-        groundCheck.position = new Vector2(-2.72f, -0.3f);
+        groundCheck.position = new Vector2(Player.position.x, Player.position.y -1f);
+        check.Respawn.transform.position = check.cp1.transform.position;
     }
 
     private void Update()
@@ -145,60 +141,20 @@ public class Controls_2 : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
         #endregion
-        #region Attack
-        if (timeBtwAttack <= 0)
-        {
-            if (Input.GetKey(KeyCode.RightShift))
-            {
-                Collider2D[] enemiestoDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatisEnemy);
-                for (int i = 0; i < enemiestoDamage.Length; i++)
-                {
-                    enemiestoDamage[i].GetComponent<Enemy>().TakeDamage(damage);
-                }
-            }
-            timeBtwAttack = startTimeBtwAttack;
-        }
-        else
-        {
-            timeBtwAttack -= startTimeBtwAttack;
-        }
-        #endregion
         //special inputs
         if (character == "Jack_Knife")
         {
             #region Jack Knife inputs
+            //dive input
             if (Input.GetKey(KeyCode.DownArrow) && !isGrounded || Input.GetKey(KeyCode.S) && !isGrounded)
             {
-                Vector3 vel = rb.velocity;
-                if (facingRight)
-                {
-                    vel.x = speed;
-                    vel.y = -jack.diveSpeed;
-                }
-                else
-                {
-                    vel.x = -speed;
-                    vel.y = -jack.diveSpeed;
-                }
-                rb.velocity = vel;
+                jack.JackDiving();
                 tempState = PlayerState.Diving;
             }
             //skate jump input
             if (Input.GetKeyDown(KeyCode.Space) && State == PlayerState.Skating)
             {
-                Vector3 vel = rb.velocity;
-                if (facingRight)
-                {
-                    vel.x = jack.skateSpeed;
-                    vel.y = jack.skateJump;
-                }
-                else
-                {
-                    vel.x = -jack.skateSpeed;
-                    vel.y = jack.skateJump;
-                }
-                rb.velocity = vel;
-                extraJumps--;
+                jack.JackSkateJump();
                 tempState = PlayerState.SkateJump;
             }
             #endregion
@@ -206,25 +162,16 @@ public class Controls_2 : MonoBehaviour
         if (character == "Stout")
         {
             #region Stout inputs
+            //hover input
             if (Input.GetKey(KeyCode.UpArrow) && !isGrounded)
             {
-                stout.hoverCounter -= Time.deltaTime;
-                Vector3 vel = rb.velocity;
-                if (stout.hoverCounter > 0)
-                {
-                    vel.y = 0;
-                    rb.gravityScale = 0;
-                    tempState = PlayerState.Hover;
-                }
-                else
-                {
-                    rb.gravityScale = 2.75f;
-                }
-                rb.velocity = vel;
+                stout.StoutHover();
+                tempState = PlayerState.Hover;
             }
             else
             {
                 rb.gravityScale = 2.75f;
+                //tempState = PlayerState.Jumping;
             }
             #endregion
         }
@@ -239,6 +186,7 @@ public class Controls_2 : MonoBehaviour
         }
         if(state == PlayerState.Idle)
         {
+            #region Idle anims
             if (character == "Jack_Knife")
             {
                 jackAnim.Play("Jack_Idle");
@@ -246,12 +194,13 @@ public class Controls_2 : MonoBehaviour
 
             if (character == "Stout")
             {
-                //stoutArt.transform.localScale = new Vector2(0.1009718f, 0.08220464286f);
                 stoutAnim.Play("Stout_Idling");
             }
+            #endregion
         }
         else if(state == PlayerState.Moving)
         {
+            #region Moving anims
             if (character == "Jack_Knife")
             {
                 jackAnim.Play("Jack_Moving");
@@ -259,12 +208,13 @@ public class Controls_2 : MonoBehaviour
 
             if (character == "Stout")
             {
-                //stoutArt.transform.localScale = new Vector2(0.1009718f, 0.08220464286f);
                 stoutAnim.Play("Stout_Moving");
             }
+            #endregion
         }
         else if(state == PlayerState.Jumping)
         {
+            #region Jumping anims
             if (character == "Jack_Knife")
             {
                 jackAnim.Play("Jack_Jumping");
@@ -274,7 +224,9 @@ public class Controls_2 : MonoBehaviour
             {
                 stoutAnim.Play("Stout_Jumping");
             }
+            #endregion
         }
+
         #region Jack Knife anims
         else if (state == PlayerState.Diving) //j
         {
@@ -295,7 +247,6 @@ public class Controls_2 : MonoBehaviour
             
         }
         #endregion
-
         #region Stout anims
         else if (state == PlayerState.Hover)
         {
@@ -341,14 +292,6 @@ public class Controls_2 : MonoBehaviour
         {
             Player.transform.position = spawnPoint.transform.position;
         }
-    }
-    #endregion
-
-    #region see attack hitbox
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
     #endregion
 

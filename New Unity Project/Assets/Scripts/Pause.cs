@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Pause : MonoBehaviour
 {
-    public static bool isPaused = false;
+    public bool isPaused = false;
     public GameObject pauseMenuUI;
     public Controls_2 c;
     public GameObject jackArt;
     public GameObject stoutArt;
     public JackKnife jack;
     public Stout stout;
+    public Unlock U;
+    public GameObject npcstout;
 
     public void Update()
     {
@@ -25,15 +27,16 @@ public class Pause : MonoBehaviour
                 PauseGame();
             }
         }
-
         if (Input.GetKeyDown(KeyCode.C) && isPaused == true)
         {
             JackSwap();
         }
-
         if(Input.GetKeyDown(KeyCode.B) && isPaused == true)
         {
-            StoutSwap();
+            if (U.unlock == true)
+            {
+                StoutSwap();
+            }
         }
     }
 
@@ -53,23 +56,24 @@ public class Pause : MonoBehaviour
 
     public void JackSwap()
     {
+        c.SetState(Controls_2.PlayerState.Jumping);
+        c.rb.gravityScale = 2.75f;
         c.character = "Jack_Knife";
-        //AnimSet();
         jack.ImJack();
         jackArt.SetActive(true);
         stoutArt.SetActive(false);
-        //c.facingRight = true;
         ResumeGame();
     }
 
     public void StoutSwap()
     {
+        c.SetState(Controls_2.PlayerState.Jumping);
+        c.rb.gravityScale = 2.75f;
         c.character = "Stout";
-        //AnimSet();
         stout.ImStout();
         jackArt.SetActive(false);
         stoutArt.SetActive(true);
-        //c.facingRight = true;
+        npcstout.SetActive(false);
         ResumeGame();
     }
 
@@ -77,17 +81,5 @@ public class Pause : MonoBehaviour
     {
         c.Player.transform.position = c.spawnPoint.transform.position;
         ResumeGame();
-    }
-
-    public void AnimSet()
-    {
-        if (c.isGrounded == false)
-        {
-            c.SetState(Controls_2.PlayerState.Jumping);
-        }
-        if (c.isGrounded == true)
-        {
-            c.SetState(Controls_2.PlayerState.Idle);
-        }
     }
 }

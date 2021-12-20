@@ -9,8 +9,6 @@ public class Enemy : MonoBehaviour
     public bool MoveRight;
     public float Timer;
     public float MaxTimer = 2;
-    public int health;
-    public GameObject enemy;
 
     void Update()
     {
@@ -24,17 +22,6 @@ public class Enemy : MonoBehaviour
         if (MoveRight) vel.x = Speed;
         else vel.x = -Speed;
         rb.velocity = vel;
-        //enemy death
-        if(health < 0)
-        {
-            enemy.transform.position = new Vector2(9999, 9999);
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        health -= damage;
-        Debug.Log("DAMAGE");
     }
 
 }

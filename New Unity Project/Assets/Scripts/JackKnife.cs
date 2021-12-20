@@ -8,8 +8,8 @@ public class JackKnife : MonoBehaviour
     public float diveSpeed = 15f;
     public float skateSpeed = 15f;
     public float skateJump = 17f;
+
     public BoxCollider2D bc;
-    //public GameObject stout;
 
     public void Start()
     {
@@ -65,16 +65,16 @@ public class JackKnife : MonoBehaviour
     public void JackSkateJump()
     {
         Vector3 vel = c.rb.velocity;
-        if (c.facingRight)
-        {
-            vel.x = skateSpeed;
-            vel.y = skateJump;
-        }
-        else
-        {
-            vel.x = -skateSpeed;
-            vel.y = skateJump;
-        }
+            if (c.facingRight)
+            {
+                vel.x = skateSpeed;
+                vel.y = skateJump;
+            }
+            else
+            {
+                vel.x = -skateSpeed;
+                vel.y = skateJump;
+            }
         c.rb.velocity = vel;
         c.extraJumps--;
     }

@@ -292,6 +292,23 @@ public class Controls_2 : MonoBehaviour
         {
             Player.transform.position = spawnPoint.transform.position;
         }
+        // jack door
+        if (collision.gameObject.layer == 11)
+        {
+            if(State != PlayerState.Diving)
+            {
+                Player.transform.position = spawnPoint.transform.position;
+            }
+        }
+        // stout door
+        if (collision.gameObject.layer == 12)
+        {
+            if(State != PlayerState.Hover)
+            {
+                Player.transform.position = spawnPoint.transform.position;
+            }
+        }
+
     }
     #endregion
 
